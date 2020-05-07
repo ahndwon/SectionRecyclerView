@@ -1,4 +1,4 @@
-package com.example.sectionrecyclerview
+package com.ahndwon.sectionrecyclerview
 
 import org.junit.Test
 

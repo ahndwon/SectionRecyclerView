@@ -1,4 +1,4 @@
-package com.example.sectionrecyclerview
+package com.ahndwon.sectionrecyclerview
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

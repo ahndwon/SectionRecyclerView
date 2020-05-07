@@ -1,4 +1,4 @@
-package com.example.sectionrecyclerview
+package com.ahndwon.sectionrecyclerview
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +7,7 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 
 class SectionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(section: Section) {
+    fun bind(section: Sectionable) {
         section.bind(itemView)
     }
 
