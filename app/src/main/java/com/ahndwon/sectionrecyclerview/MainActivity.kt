@@ -1,6 +1,7 @@
 package com.ahndwon.sectionrecyclerview
 
 import android.os.Bundle
+import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -73,9 +74,7 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
 
-            override fun onItemSwipe(position: Int) {
-//                adapter.deleteItem(position, ::showUndoSnackBar)
-            }
+            override fun onItemSwipe(position: Int) {}
         }
 
         val callback = ItemTouchHelperCallback(
@@ -87,15 +86,14 @@ class MainActivity : AppCompatActivity() {
 
         sectionRecyclerView.adapter = adapter
 
-        adapter.onDragTouch = { viewHolder ->
-            itemTouchHelper.startDrag(viewHolder)
+        adapter.onDragTouch = { motionEvent, viewHolder ->
+            if (motionEvent.actionMasked == MotionEvent.ACTION_DOWN) {
+                itemTouchHelper.startDrag(viewHolder)
+            }
         }
-
-        sectionRecyclerView.isLongClickable = false
 
         sectionRecyclerView.layoutManager =
             LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         sectionRecyclerView.addItemDecoration(StickyHeaderItemDecoration(adapter))
-
     }
 }

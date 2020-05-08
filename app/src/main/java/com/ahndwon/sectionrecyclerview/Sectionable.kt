@@ -1,5 +1,6 @@
 package com.ahndwon.sectionrecyclerview
 
+import android.view.MotionEvent
 import android.view.View
 
 interface Sectionable {
@@ -9,8 +10,6 @@ interface Sectionable {
     interface Header : Sectionable
 
     interface Child : Sectionable {
-        var onDragTouch: (() -> Unit)?
-
-        fun onDragTouch()
+        fun setDragTouch(itemView: View, onDragTouch: (MotionEvent) -> Unit)
     }
 }

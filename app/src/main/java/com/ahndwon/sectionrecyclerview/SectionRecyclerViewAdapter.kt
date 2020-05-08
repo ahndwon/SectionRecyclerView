@@ -1,5 +1,6 @@
 package com.ahndwon.sectionrecyclerview
 
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,7 +9,7 @@ class SectionRecyclerViewAdapter : RecyclerView.Adapter<SectionViewHolder>(),
     StickyHeaderItemDecoration.StickyHeaderInterface {
 
     var items: ArrayList<Sectionable> = ArrayList()
-    var onDragTouch: ((RecyclerView.ViewHolder) -> Unit)? = null
+    var onDragTouch: ((MotionEvent, RecyclerView.ViewHolder) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionViewHolder {
         val layout = when (viewType) {
@@ -26,7 +27,15 @@ class SectionRecyclerViewAdapter : RecyclerView.Adapter<SectionViewHolder>(),
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: SectionViewHolder, position: Int) {
-        holder.bind(items[position])
+        val item = items[position]
+
+        holder.bind(item)
+
+        if (item is Sectionable.Child) {
+            item.setDragTouch(holder.itemView) { motionEvent ->
+                onDragTouch?.invoke(motionEvent, holder)
+            }
+        }
     }
 
     override fun getHeaderPositionForItem(itemPosition: Int): Int {

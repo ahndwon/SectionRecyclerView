@@ -1,14 +1,16 @@
 package com.ahndwon.sectionrecyclerview
 
+import android.view.MotionEvent
 import android.view.View
 import kotlinx.android.synthetic.main.item_child_one.view.*
 
 class ChildOne(private val body: String) : Sectionable.Child {
 
-    override var onDragTouch: (() -> Unit)? = null
-
-    override fun onDragTouch() {
-
+    override fun setDragTouch(itemView: View, onDragTouch: (MotionEvent) -> Unit) {
+        itemView.dragButton.setOnTouchListener { _, event ->
+            onDragTouch(event)
+            false
+        }
     }
 
     override fun bind(itemView: View) {
