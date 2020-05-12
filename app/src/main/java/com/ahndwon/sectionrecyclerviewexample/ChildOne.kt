@@ -1,10 +1,11 @@
-package com.ahndwon.sectionrecyclerview
+package com.ahndwon.sectionrecyclerviewexample
 
 import android.view.MotionEvent
 import android.view.View
-import kotlinx.android.synthetic.main.item_child_two.view.*
+import com.ahndwon.sectionrecyclerview.Sectionable
+import kotlinx.android.synthetic.main.item_child_one.view.*
 
-class ChildTwo(private val body: String) : Sectionable.Child {
+class ChildOne(private val body: String) : Sectionable.Child {
 
     override fun setDragTouch(itemView: View, onDragTouch: (MotionEvent) -> Unit) {
         itemView.dragButton.setOnTouchListener { _, event ->
@@ -20,7 +21,7 @@ class ChildTwo(private val body: String) : Sectionable.Child {
     override fun viewType(): Int = VIEW_TYPE
 
     companion object {
-        const val VIEW_TYPE = 12
+        const val VIEW_TYPE = 11
     }
 
 }
