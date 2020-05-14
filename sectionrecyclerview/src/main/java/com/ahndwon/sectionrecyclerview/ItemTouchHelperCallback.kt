@@ -2,6 +2,7 @@ package com.ahndwon.sectionrecyclerview
 
 import android.content.Context
 import android.graphics.*
+import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.res.use
 import androidx.core.view.ViewCompat
@@ -11,11 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ItemTouchHelperCallback(
     context: Context,
+    attrs: AttributeSet? = null,
     private val listener: ItemTouchHelperListener
 ) : ItemTouchHelper.Callback() {
 
-    private val elevation = context.obtainStyledAttributes(
-        intArrayOf(R.attr.draggedItemElevation)
+    private val elevation = context.theme.obtainStyledAttributes(
+        attrs, R.styleable.SectionRecyclerView, 0, 0
     ).use {
         it.getDimensionPixelSize(0, 0).toFloat()
     }

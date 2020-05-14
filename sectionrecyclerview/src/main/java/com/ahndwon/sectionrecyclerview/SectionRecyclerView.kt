@@ -15,12 +15,16 @@ import androidx.recyclerview.widget.RecyclerView
 class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
 
     constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        setTouchHelper(attrs)
+    }
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
         attrs,
         defStyleAttr
-    )
+    ) {
+        setTouchHelper(attrs)
+    }
 
     companion object {
         var BOTTOM_CARD_ANIMATE_DURATION = 300L
@@ -35,7 +39,7 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
             field = value
             field?.onDragTouch = { motionEvent, viewHolder ->
                 if (motionEvent.actionMasked == MotionEvent.ACTION_DOWN) {
-                    itemTouchHelper.startDrag(viewHolder)
+                    itemTouchHelper?.startDrag(viewHolder)
                 }
             }
             val stickyHeaderItemDecoration = StickyHeaderItemDecoration(
@@ -71,13 +75,20 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
         }
     }
 
-    private val callback = ItemTouchHelperCallback(context, this)
+    private var callback : ItemTouchHelperCallback? = null
 
-    private val itemTouchHelper = ItemTouchHelper(callback)
+    private var itemTouchHelper : ItemTouchHelper? = null
 
     init {
-        itemTouchHelper.attachToRecyclerView(this)
         this.addOnScrollListener(onScrollListener)
+    }
+
+    private fun setTouchHelper(attrs: AttributeSet?) {
+        callback = ItemTouchHelperCallback(context, attrs,this)
+        callback?.let {
+            itemTouchHelper = ItemTouchHelper(it)
+            itemTouchHelper?.attachToRecyclerView(this)
+        }
     }
 
 

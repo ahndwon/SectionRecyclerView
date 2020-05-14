@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="draggedItemElevation" format="dimension"/>
+    <declare-styleable name="SectionRecyclerView">
+        <attr name="draggedItemElevation" format="dimension"/>
+    </declare-styleable>
 </resources>
