@@ -94,7 +94,9 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
     }
 
     private fun removeCompanionViewDimmer(container: ViewGroup) {
-        container.removeView(container.findViewById(DIMMER_ID))
+        handler.post {
+            container.removeView(container.findViewById(DIMMER_ID))
+        }
     }
 
     override fun onItemDrag(viewHolder: ViewHolder) {}
