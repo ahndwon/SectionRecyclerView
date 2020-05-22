@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +35,7 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
 
     var companionView: View? = null
     var companionViewAnimator: CompanionViewAnimator? = null
+    var touchHelperListener : ItemTouchHelperListener? = null
 
     var sectionAdapter: SectionRecyclerViewAdapter? = null
         set(value) {
@@ -116,7 +116,7 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
     }
 
     override fun onItemDrag(viewHolder: ViewHolder) {
-
+        touchHelperListener?.onItemDrag(viewHolder)
     }
 
     override fun onItemDragStart(viewHolder: ViewHolder) {
@@ -126,6 +126,8 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
                 this@SectionRecyclerView.parent as? ViewGroup ?: return
             )
         }
+
+        touchHelperListener?.onItemDragStart(viewHolder)
     }
 
     override fun onItemMove(from: Int, to: Int): Boolean {
@@ -140,12 +142,17 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
             adapter.notifyItemMoved(from, to)
         }
 
+        touchHelperListener?.onItemMove(from, to)
+
         return true
     }
 
-    override fun onItemSwipe(position: Int) {}
+    override fun onItemSwipe(position: Int) {
+        touchHelperListener?.onItemSwipe(position)
+    }
 
     override fun onItemDragStop(viewHolder: ViewHolder) {
         removeCompanionViewDimmer(this@SectionRecyclerView.parent as? ViewGroup ?: return)
+        touchHelperListener?.onItemDragStop(viewHolder)
     }
 }

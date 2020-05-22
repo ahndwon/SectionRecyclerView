@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 
-class SectionRecyclerViewAdapter(private val layoutChooser: LayoutChooser) :
+class SectionRecyclerViewAdapter(private val layoutChooser: LayoutChooser, private val isDragOn: Boolean) :
     RecyclerView.Adapter<SectionViewHolder>(),
     StickyHeaderItemDecoration.StickyHeaderInterface {
 
@@ -25,7 +25,7 @@ class SectionRecyclerViewAdapter(private val layoutChooser: LayoutChooser) :
 
         holder.bind(item)
 
-        if (item is Sectionable.Child) {
+        if (isDragOn && item is Sectionable.Child) {
             item.setDragTouch(holder.itemView) { motionEvent ->
                 onDragTouch?.invoke(motionEvent, holder)
             }
