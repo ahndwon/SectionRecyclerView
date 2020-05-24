@@ -36,6 +36,7 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
     var companionView: View? = null
     var companionViewAnimator: CompanionViewAnimator? = null
     var touchHelperListener : ItemTouchHelperListener? = null
+    var onItemMoveComparator : OnItemMoveSectionableComparator? = null
 
     var sectionAdapter: SectionRecyclerViewAdapter? = null
         set(value) {
@@ -135,11 +136,21 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
             val fromItem = adapter.items[from]
             val toItem = adapter.items[to]
 
-            if (fromItem.viewType() != toItem.viewType()) return false
+//            if (fromItem.viewType() != toItem.viewType()) return false
 
-            adapter.items.removeAt(from)
-            adapter.items.add(to, fromItem)
-            adapter.notifyItemMoved(from, to)
+            onItemMoveComparator?.let {
+                if (it.onItemMove(fromItem, toItem)) {
+                    adapter.items.removeAt(from)
+                    adapter.items.add(to, fromItem)
+                    adapter.notifyItemMoved(from, to)
+                }
+            }
+
+//            if (onItemMoveComparator?.onItemMove(fromItem, toItem) == false) return false
+
+//            adapter.items.removeAt(from)
+//            adapter.items.add(to, fromItem)
+//            adapter.notifyItemMoved(from, to)
         }
 
         touchHelperListener?.onItemMove(from, to)

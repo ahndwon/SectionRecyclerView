@@ -3,9 +3,7 @@ package com.ahndwon.sectionrecyclerviewexample
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.ahndwon.sectionrecyclerview.SectionRecyclerView
-import com.ahndwon.sectionrecyclerview.SectionRecyclerViewAdapter
-import com.ahndwon.sectionrecyclerview.CompanionViewAnimator
+import com.ahndwon.sectionrecyclerview.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -88,13 +86,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val adapter = SectionRecyclerViewAdapter(layoutChooser).apply {
+        val adapter = SectionRecyclerViewAdapter(layoutChooser, true).apply {
             this.items = items
         }
 
         sectionRecyclerView.companionViewAnimator = companionAnimator
         sectionRecyclerView.sectionAdapter = adapter
         sectionRecyclerView.companionView = bottomCard
+        sectionRecyclerView.onItemMoveComparator = object : OnItemMoveSectionableComparator {
+            override fun onItemMove(from: Sectionable, to: Sectionable): Boolean {
+                if (from is Sectionable.Header || from is Sectionable.Header) return false
+
+                return from.getSection() == to.getSection()
+            }
+        }
     }
 
 }

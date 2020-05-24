@@ -6,6 +6,7 @@ import android.view.View
 interface Sectionable {
     fun bind(itemView: View)
     fun viewType(): Int
+    fun getSection(): String
 
     interface Header : Sectionable
 

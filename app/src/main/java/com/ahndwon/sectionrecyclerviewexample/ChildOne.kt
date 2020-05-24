@@ -7,6 +7,8 @@ import kotlinx.android.synthetic.main.item_child_one.view.*
 
 class ChildOne(private val body: String) : Sectionable.Child {
 
+    val sectionId = "ChildOne"
+
     override fun setDragTouch(itemView: View, onDragTouch: (MotionEvent) -> Unit) {
         itemView.dragButton.setOnTouchListener { _, event ->
             onDragTouch(event)
@@ -19,6 +21,8 @@ class ChildOne(private val body: String) : Sectionable.Child {
     }
 
     override fun viewType(): Int = VIEW_TYPE
+
+    override fun getSection(): String = sectionId
 
     companion object {
         const val VIEW_TYPE = 11
