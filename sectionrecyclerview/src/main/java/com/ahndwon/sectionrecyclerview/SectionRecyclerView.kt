@@ -139,17 +139,21 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
             onItemMoveComparator?.let {
                 if (it.onItemMove(fromItem, toItem)) {
                     adapter.moveItem(from, to)
+                    return true
                 }
             }
         }
 
-        return true
+        return false
     }
 
     private fun SectionRecyclerViewAdapter.moveItem(from: Int, to: Int) {
+        val fromItem = this.items[from]
+
         this.items.removeAt(from)
-        this.items.add(to, this.items[from])
+        this.items.add(to, fromItem)
         this.notifyItemMoved(from, to)
+
         touchHelperListener?.onItemMove(from, to)
     }
 
