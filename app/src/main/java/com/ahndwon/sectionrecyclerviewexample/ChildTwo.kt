@@ -20,7 +20,7 @@ class ChildTwo(private val body: String) : Sectionable.Child {
         itemView.bodyTextView.text = body
     }
 
-    override fun viewType(): Int = VIEW_TYPE
+    override fun getViewType(): Int = VIEW_TYPE
 
     override fun getSection(): String = sectionId
 

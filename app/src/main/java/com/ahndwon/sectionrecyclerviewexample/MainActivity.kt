@@ -93,13 +93,13 @@ class MainActivity : AppCompatActivity() {
         sectionRecyclerView.companionViewAnimator = companionAnimator
         sectionRecyclerView.sectionAdapter = adapter
         sectionRecyclerView.companionView = bottomCard
-        sectionRecyclerView.onItemMoveComparator = object : OnItemMoveSectionableComparator {
-            override fun onItemMove(from: Sectionable, to: Sectionable): Boolean {
-                if (from is Sectionable.Header || from is Sectionable.Header) return false
-
-                return from.getSection() == to.getSection()
-            }
-        }
+//        sectionRecyclerView.onItemMoveComparator = object : OnItemMoveSectionableComparator {
+//            override fun onItemMove(from: Sectionable, to: Sectionable): Boolean {
+//                if (from is Sectionable.Header || from is Sectionable.Header) return false
+//
+//                return from.getSection() == to.getSection()
+//            }
+//        }
     }
 
 }

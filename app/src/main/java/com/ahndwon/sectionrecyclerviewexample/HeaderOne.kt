@@ -12,7 +12,7 @@ class HeaderOne(private val header: String) : Sectionable.Header {
         itemView.headerTextView.text = header
     }
 
-    override fun viewType(): Int = VIEW_TYPE
+    override fun getViewType(): Int = VIEW_TYPE
 
     override fun getSection(): String = sectionId
 

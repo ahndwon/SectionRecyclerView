@@ -16,7 +16,7 @@ class SectionRecyclerViewAdapter(private val layoutChooser: LayoutChooser, priva
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionViewHolder =
         SectionViewHolder.create(parent, layoutChooser.onCreateViewHolder(viewType))
 
-    override fun getItemViewType(position: Int): Int = items[position].viewType()
+    override fun getItemViewType(position: Int): Int = items[position].getViewType()
 
     override fun getItemCount(): Int = items.size
 
@@ -48,7 +48,7 @@ class SectionRecyclerViewAdapter(private val layoutChooser: LayoutChooser, priva
     }
 
     override fun getHeaderLayout(headerPosition: Int): Int =
-        layoutChooser.onGetHeaderLayout(items[headerPosition].viewType())
+        layoutChooser.onGetHeaderLayout(items[headerPosition].getViewType())
 
     override fun bindHeaderData(header: View?, headerPosition: Int) {
         items[headerPosition].bind(header ?: return)
