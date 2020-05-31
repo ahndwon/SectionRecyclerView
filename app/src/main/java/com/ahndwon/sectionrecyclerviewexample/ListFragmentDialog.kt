@@ -2,19 +2,28 @@ package com.ahndwon.sectionrecyclerviewexample
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.ahndwon.sectionrecyclerview.*
-import com.ahndwon.sectionrecyclerviewexample.items.ChildOne
-import com.ahndwon.sectionrecyclerviewexample.items.ChildTwo
-import com.ahndwon.sectionrecyclerviewexample.items.HeaderOne
-import com.ahndwon.sectionrecyclerviewexample.items.HeaderTwo
+import com.ahndwon.sectionrecyclerviewexample.items.*
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.android.synthetic.main.dialog_fragment_list.*
 import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.android.synthetic.main.fragment_list.bottomCard
+import kotlinx.android.synthetic.main.fragment_list.sectionRecyclerView
 
-class ListFragmentDialog(val listItems : ArrayList<Sectionable>) : DialogFragment() {
+class ListFragmentDialog(val listItems: ArrayList<Sectionable>) : DialogFragment() {
+
+    var onSaveClick: ((ArrayList<Sectionable>) -> Unit)? = null
+    var onCancelClick: ((ArrayList<Sectionable>) -> Unit)? = null
+
+    var backupItems: ArrayList<Sectionable> = ArrayList(listItems)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +39,10 @@ class ListFragmentDialog(val listItems : ArrayList<Sectionable>) : DialogFragmen
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        dialog?.window?.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        dialog?.window?.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
 
         return super.onCreateDialog(savedInstanceState)
     }
@@ -82,6 +94,98 @@ class ListFragmentDialog(val listItems : ArrayList<Sectionable>) : DialogFragmen
 
                 return from.getSection() == to.getSection()
             }
+        }
+
+        RxBus.listen(ListItem::class.java)
+//            .flatMap {listItem ->
+//                var item: Pair<Int, ChildOne>? = null
+//                backupItems.forEachIndexed { index, sectionable ->
+//                    if (sectionable is ChildOne) {
+//                        if (sectionable.getItem<ListItem>().id == listItem.id) {
+//                            item = Pair(index, ChildOne(listItem))
+//                            return@flatMap Observable.just(item)
+//                        }
+//                    }
+//                }
+//                Log.d("TEST", "item flatMap  : $listItem")
+//
+//                Observable.just(item!!)
+//            }
+//            .filter {
+//                it != null
+//            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ listItem ->
+                Log.d("TEST", "item listened")
+
+                adapter.items.forEachIndexed { index, sectionable ->
+                    if (sectionable is ChildOne) {
+                        if (sectionable.getItem<ListItem>().id == listItem.id) {
+                            val listenItem = ChildOne(listItem)
+                            adapter.items[index] = listenItem
+                            adapter.notifyItemChanged(index)
+                            Log.d("TEST", "item listened  : $listenItem")
+                        }
+                    }
+                }
+
+//                listItem?.let {
+//                    adapter.items[listItem.first] = listItem.second
+//                    adapter.notifyItemChanged(listItem.first)
+//                    Log.d("TEST", "item listened  : $listItem")
+//                }
+            }, {
+                Log.d("ListFragmentDialog", "listen failed : $it")
+            })
+
+        RxBus.listen(ListItem::class.java)
+//            .flatMap { listItem ->
+//                var item: Pair<Int, ChildOne>? = null
+//                backupItems.forEachIndexed { index, sectionable ->
+//                    if (sectionable is ChildOne) {
+//                        if (sectionable.getItem<ListItem>().id == listItem.id) {
+//                            item = Pair(index, ChildOne(listItem))
+//                        }
+//                    }
+//                }
+//                Log.d("TEST", "item flatMap backup  : $listItem")
+//                Observable.just(item!!)
+//            }
+//            .filter {
+//                it != null
+//            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ listItem ->
+                Log.d("TEST", "item listened backup")
+                adapter.items.forEachIndexed { index, sectionable ->
+                    if (sectionable is ChildOne) {
+                        if (sectionable.getItem<ListItem>().id == listItem.id) {
+                            val listenItem = ChildOne(listItem)
+                            adapter.items[index] = listenItem
+                            adapter.notifyItemChanged(index)
+                            Log.d("TEST", "item listened  : $listenItem")
+                        }
+                    }
+                }
+
+//                listItem?.let {
+//                    backupItems[listItem.first] = listItem.second
+//                    Log.d("TEST", "item listened  : $listItem")
+//                }
+            }, {
+                Log.d("ListFragmentDialog", "listen failed : $it")
+            })
+
+        save_button.setOnClickListener {
+            onSaveClick?.invoke(listItems)
+            dismiss()
+        }
+
+        cancel_button.setOnClickListener {
+            onCancelClick?.invoke(backupItems)
+            dismiss()
         }
     }
 }
