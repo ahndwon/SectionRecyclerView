@@ -7,6 +7,7 @@ interface Sectionable {
     fun bind(itemView: View)
     fun getViewType(): Int
     fun getSection(): String
+    fun <T> getItem(): T
 
     interface Header : Sectionable
 
