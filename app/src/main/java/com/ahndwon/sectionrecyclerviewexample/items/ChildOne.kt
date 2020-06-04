@@ -16,8 +16,9 @@ class ChildOne(private val item: ListItem) : Sectionable.Child {
         }
     }
 
-    override fun bind(itemView: View) {
-        itemView.bodyTextView.text = "${item.text}, ${item.id}"
+    override fun bind(itemView: View, isDragOn: Boolean) {
+        val body = "${item.text}, ${item.id}"
+        itemView.bodyTextView.text = body
     }
 
     override fun getViewType(): Int =

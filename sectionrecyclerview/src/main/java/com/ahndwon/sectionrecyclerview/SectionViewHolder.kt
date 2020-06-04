@@ -7,8 +7,15 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 
 class SectionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(section: Sectionable) {
-        section.bind(itemView)
+    var item: Sectionable? = null
+
+    fun bind(section: Sectionable, isDragOn: Boolean) {
+        item = section
+        section.bind(itemView, isDragOn)
+    }
+
+    fun reBind(isDragOn: Boolean) {
+        item?.bind(itemView, isDragOn)
     }
 
     companion object {

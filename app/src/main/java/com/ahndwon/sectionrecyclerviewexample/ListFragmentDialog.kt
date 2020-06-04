@@ -42,7 +42,7 @@ class ListFragmentDialog(val listItems: ArrayList<Sectionable>) : DialogFragment
         dialog?.window?.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
+        )
 
         return super.onCreateDialog(savedInstanceState)
     }
@@ -89,10 +89,9 @@ class ListFragmentDialog(val listItems: ArrayList<Sectionable>) : DialogFragment
         sectionRecyclerView.sectionAdapter = adapter
         sectionRecyclerView.companionView = bottomCard
         sectionRecyclerView.onItemMoveComparator = object : OnItemMoveSectionableComparator {
-            override fun onItemMove(from: Sectionable, to: Sectionable): Boolean {
-                if (from is Sectionable.Header || from is Sectionable.Header) return false
+            override fun compare(from: Int, to: Int): Boolean {
 
-                return from.getSection() == to.getSection()
+                return adapter.items[from].getSection() == adapter.items[to].getSection()
             }
         }
 

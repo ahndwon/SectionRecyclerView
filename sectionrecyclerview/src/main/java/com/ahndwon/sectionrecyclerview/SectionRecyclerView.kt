@@ -37,6 +37,7 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
     var companionViewAnimator: CompanionViewAnimator? = null
     var touchHelperListener: ItemTouchHelperListener? = null
     var onItemMoveComparator: OnItemMoveSectionableComparator? = null
+    var onDimmer: Boolean = true
 
     var sectionAdapter: SectionRecyclerViewAdapter? = null
         set(value) {
@@ -97,6 +98,7 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun addCompanionViewDimmer(companion: View, container: ViewGroup) {
+        if (!onDimmer) return
         val dimmer = View(container.context).apply {
             this.id = DIMMER_ID
             this.background = ColorDrawable(ContextCompat.getColor(context, R.color.dimColor))
@@ -133,11 +135,9 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
 
     override fun onItemMove(from: Int, to: Int): Boolean {
         sectionAdapter?.let { adapter ->
-            val fromItem = adapter.items[from]
-            val toItem = adapter.items[to]
 
             onItemMoveComparator?.let {
-                if (it.onItemMove(fromItem, toItem)) {
+                if (it.compare(from, to)) {
                     adapter.moveItem(from, to)
                     return true
                 }
@@ -148,6 +148,8 @@ class SectionRecyclerView : RecyclerView, ItemTouchHelperListener {
     }
 
     private fun SectionRecyclerViewAdapter.moveItem(from: Int, to: Int) {
+        touchHelperListener?.onBeforeItemMove(from, to)
+
         val fromItem = this.items[from]
 
         this.items.removeAt(from)

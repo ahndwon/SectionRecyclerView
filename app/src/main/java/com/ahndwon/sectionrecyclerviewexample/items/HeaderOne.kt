@@ -8,7 +8,7 @@ class HeaderOne(private val item: String) : Sectionable.Header {
 
     val sectionId = "HeaderOne"
 
-    override fun bind(itemView: View) {
+    override fun bind(itemView: View, isDragOn: Boolean) {
         itemView.headerTextView.text = item
     }
 

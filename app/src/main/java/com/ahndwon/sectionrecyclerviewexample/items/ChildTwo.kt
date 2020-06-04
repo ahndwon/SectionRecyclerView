@@ -16,7 +16,7 @@ class ChildTwo(private val item: ListItem) : Sectionable.Child {
         }
     }
 
-    override fun bind(itemView: View) {
+    override fun bind(itemView: View, isDragOn: Boolean) {
         itemView.bodyTextView.text = item.text
     }
 
