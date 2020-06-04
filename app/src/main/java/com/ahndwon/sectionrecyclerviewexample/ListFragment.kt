@@ -5,11 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.ahndwon.sectionrecyclerview.*
+import com.ahndwon.sectionrecyclerview.CompanionViewAnimator
+import com.ahndwon.sectionrecyclerview.OnItemMoveSectionableComparator
+import com.ahndwon.sectionrecyclerview.SectionRecyclerView
+import com.ahndwon.sectionrecyclerview.SectionRecyclerViewAdapter
 import com.ahndwon.sectionrecyclerviewexample.items.*
 import io.reactivex.rxjava3.core.Observable
 import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.android.synthetic.main.item_header_one.view.*
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
@@ -33,8 +39,27 @@ class ListFragment : Fragment() {
             }
     }
 
-    val adapter = SectionRecyclerViewAdapter(layoutChooser, true).apply {
-        this.items = Dummies.items
+    private val headerListener by lazy {
+        object : SectionRecyclerViewAdapter.HeaderListener {
+            override fun onMoveHeader(currentHeader: View, nextHeader: View) {
+                headerView.visibility = View.GONE
+            }
+
+            override fun onDrawHeader(header: View) {
+                val text = header.findViewById<TextView>(R.id.headerTextView).text
+                headerView.headerTextView.text = text
+                headerView.visibility = View.VISIBLE
+                headerView.headerButton.setOnClickListener {
+                    Toast.makeText(header.context, "test", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    val adapter by lazy {
+        SectionRecyclerViewAdapter(layoutChooser, headerListener, true).apply {
+            this.items = Dummies.items
+        }
     }
 
     override fun onCreateView(

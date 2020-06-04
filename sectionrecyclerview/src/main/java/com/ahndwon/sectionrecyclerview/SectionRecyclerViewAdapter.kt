@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 open class SectionRecyclerViewAdapter(
     private val layoutChooser: LayoutChooser,
-    private val isDragOn: Boolean
+    private val headerListener : HeaderListener? = null,
+    private val isDragOn: Boolean = false
 ) :
     RecyclerView.Adapter<SectionViewHolder>(),
     StickyHeaderItemDecoration.StickyHeaderInterface {
@@ -59,11 +60,24 @@ open class SectionRecyclerViewAdapter(
 
     override fun isHeader(itemPosition: Int): Boolean = items[itemPosition] is Sectionable.Header
 
+    override fun onMoveHeader(currentHeader: View, nextHeader: View) {
+        headerListener?.onMoveHeader(currentHeader, nextHeader)
+    }
+
+    override fun onDrawHeader(header : View) {
+        headerListener?.onDrawHeader(header)
+    }
+
     interface LayoutChooser {
         @LayoutRes
         fun onCreateViewHolder(viewType: Int): Int
 
         @LayoutRes
         fun onGetHeaderLayout(viewType: Int): Int
+    }
+
+    interface HeaderListener {
+        fun onMoveHeader(currentHeader: View, nextHeader: View)
+        fun onDrawHeader(header : View)
     }
 }

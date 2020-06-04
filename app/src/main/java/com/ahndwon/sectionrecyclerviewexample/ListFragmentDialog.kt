@@ -11,10 +11,8 @@ import androidx.fragment.app.DialogFragment
 import com.ahndwon.sectionrecyclerview.*
 import com.ahndwon.sectionrecyclerviewexample.items.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.dialog_fragment_list.*
-import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_list.bottomCard
 import kotlinx.android.synthetic.main.fragment_list.sectionRecyclerView
 
@@ -81,7 +79,7 @@ class ListFragmentDialog(val listItems: ArrayList<Sectionable>) : DialogFragment
             }
         }
 
-        val adapter = SectionRecyclerViewAdapter(layoutChooser, true).apply {
+        val adapter = SectionRecyclerViewAdapter(layoutChooser, null, true).apply {
             this.items = listItems
         }
 

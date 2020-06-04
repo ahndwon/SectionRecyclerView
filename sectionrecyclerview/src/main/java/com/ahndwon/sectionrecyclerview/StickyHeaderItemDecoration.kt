@@ -30,16 +30,14 @@ class StickyHeaderItemDecoration(private val mListener: StickyHeaderInterface) :
         val contactPoint = currentHeader.bottom
         val childInContact = getChildInContact(parent, contactPoint, headerPos)
 
-        if (childInContact != null && mListener.isHeader(
-                parent.getChildAdapterPosition(
-                    childInContact
-                )
-            )
+        if (childInContact != null &&
+            mListener.isHeader(parent.getChildAdapterPosition(childInContact))
         ) {
+            mListener.onMoveHeader(currentHeader, childInContact)
             moveHeader(c, currentHeader, childInContact)
             return
         }
-
+        mListener.onDrawHeader(currentHeader)
         drawHeader(c, currentHeader)
     }
 
@@ -161,6 +159,10 @@ class StickyHeaderItemDecoration(private val mListener: StickyHeaderInterface) :
          * @return true, if item at the specified adapter's position represents a header.
          */
         fun isHeader(itemPosition: Int): Boolean
+
+        fun onMoveHeader(currentHeader: View, nextHeader: View)
+
+        fun onDrawHeader(header: View)
     }
 
 }
