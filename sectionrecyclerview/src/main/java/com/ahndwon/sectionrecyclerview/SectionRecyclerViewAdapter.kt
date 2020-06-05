@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 open class SectionRecyclerViewAdapter(
     private val layoutChooser: LayoutChooser,
-    private val headerListener : HeaderListener? = null,
+    private val headerListener: HeaderListener? = null,
     private val isDragOn: Boolean = false
 ) :
     RecyclerView.Adapter<SectionViewHolder>(),
@@ -64,7 +64,7 @@ open class SectionRecyclerViewAdapter(
         headerListener?.onMoveHeader(currentHeader, nextHeader)
     }
 
-    override fun onDrawHeader(header : View) {
+    override fun onDrawHeader(header: View) {
         headerListener?.onDrawHeader(header)
     }
 
@@ -78,6 +78,6 @@ open class SectionRecyclerViewAdapter(
 
     interface HeaderListener {
         fun onMoveHeader(currentHeader: View, nextHeader: View)
-        fun onDrawHeader(header : View)
+        fun onDrawHeader(header: View)
     }
 }
