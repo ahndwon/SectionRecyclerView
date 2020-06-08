@@ -1,9 +1,13 @@
 package com.ahndwon.sectionrecyclerviewexample.items
 
-import java.util.*
-
 data class ListItem(
     val category: String,
     val text: String,
-    val id : Int
+    val id : Int,
+    val test : Test = Test()
+)
+
+data class Test(
+    val body: String = "body",
+    val shit : String = "shit"
 )

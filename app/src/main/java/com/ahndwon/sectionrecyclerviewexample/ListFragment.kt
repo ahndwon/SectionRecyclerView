@@ -8,11 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.ahndwon.sectionrecyclerview.CompanionViewAnimator
-import com.ahndwon.sectionrecyclerview.OnItemMoveSectionableComparator
-import com.ahndwon.sectionrecyclerview.SectionRecyclerView
-import com.ahndwon.sectionrecyclerview.SectionRecyclerViewAdapter
+import com.ahndwon.sectionrecyclerview.*
 import com.ahndwon.sectionrecyclerviewexample.items.*
+import com.google.gson.GsonBuilder
 import io.reactivex.rxjava3.core.Observable
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.item_header_one.view.*
@@ -85,8 +83,6 @@ class ListFragment : Fragment() {
             }
         }
 
-
-
         adapter.notifyDataSetChanged()
 
         sectionRecyclerView.companionViewAnimator = companionAnimator
@@ -94,12 +90,12 @@ class ListFragment : Fragment() {
         sectionRecyclerView.companionView = bottomCard
         sectionRecyclerView.onItemMoveComparator = object : OnItemMoveSectionableComparator {
             override fun compare(from: Int, to: Int): Boolean {
-
                 return adapter.items[from].getSection() == adapter.items[to].getSection()
             }
         }
 
         dialog_button.setOnClickListener {
+//            val dialog = ListFragmentDialog(copy(adapter.items))
             val dialog = ListFragmentDialog(adapter.items)
             dialog.onSaveClick = {
                 adapter.items = it
@@ -114,6 +110,29 @@ class ListFragment : Fragment() {
         }
 
         publishChildren()
+    }
+
+    private fun copy(items: ArrayList<Sectionable>): ArrayList<Sectionable> {
+        val gsonBuilder = GsonBuilder()
+        gsonBuilder.registerTypeAdapter(Sectionable::class.java, InterfaceAdapter())
+//        gsonBuilder.registerTypeAdapter(ChildOne::class.java, InterfaceAdapter(Sectionable::class.java))
+//            .registerTypeAdapter(ChildTwo::class.java, InterfaceAdapter(Sectionable::class.java))
+//            .registerTypeAdapter(HeaderOne::class.java, InterfaceAdapter(Sectionable::class.java))
+//            .registerTypeAdapter(HeaderTwo::class.java, InterfaceAdapter(Sectionable::class.java))
+        val gson = gsonBuilder.create()
+
+        return ArrayList(items.map {
+            val json = gson.toJson(it)
+            Log.d("copy", "json : $json")
+            when(it) {
+                is ChildOne -> gson.fromJson(json, ChildOne::class.java)
+                is ChildTwo -> gson.fromJson(json, ChildTwo::class.java)
+                is HeaderOne -> gson.fromJson(json, HeaderOne::class.java)
+                is HeaderTwo -> gson.fromJson(json, HeaderTwo::class.java)
+                else -> gson.fromJson(json, ChildOne::class.java)
+            } as Sectionable
+//            gson.fromJson(json, Sectionable::class.java)
+        })
     }
 
     private fun publishChildren() {
